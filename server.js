@@ -1,9 +1,15 @@
 const express = require('express');
 const path = require('path');
-// const { v4: uuidv4 } = require('uuid');
-const api = require('./public/assets/js/index.js');
+//Make a unique id per creating object to push
+const { v4: uuidv4 } = require('uuid');
+const fs = require('fs');
 
-
+// File structure to keep clean. Handling the post notes
+const {
+  readFromFile,
+  readAndAppend,
+  writeToFile,
+} = require('./helpers/fsUtils');
 const PORT = process.env.port || 3001;
 
 const app = express();
@@ -12,8 +18,8 @@ const app = express();
 // Middleware for parsing JSON and urlencoded form data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/api', api);
-const notesDB = requre('./db/db.json')
+
+const notesDB = require('./db/db.json')
 
 app.use(express.static('public'));
 
@@ -37,7 +43,7 @@ app.post('/api/notes', (req, res) => {
     const newNote = {
       title,
       text,
-      // tip_id: uuidv4(),
+      tip_id: uuidv4(),
     };
 
     readAndAppend(newNote, './db/db.json');
@@ -49,8 +55,10 @@ app.post('/api/notes', (req, res) => {
 );
 
 // GET Route for notes api
-app.get('/api/notes', (req, res) =>
-  res.status(200).json(notesDB)
+app.get('/api/notes', (req, res) => {
+  // res.json(notesDB)
+  readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
+}
 );
 
 

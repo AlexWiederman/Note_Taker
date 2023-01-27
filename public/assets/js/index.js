@@ -170,6 +170,10 @@ const renderNoteList = async (notes) => {
   }
 };
 
+// Looks for click on notes sidebar and displays it
+
+
+
 // Gets notes from the db and renders them to the sidebar
 const getAndRenderNotes = () => getNotes().then(renderNoteList);
 
@@ -178,6 +182,8 @@ if (window.location.pathname === '/notes') {
   newNoteBtn.addEventListener('click', handleNewNoteView);
   noteTitle.addEventListener('keyup', handleRenderSaveBtn);
   noteText.addEventListener('keyup', handleRenderSaveBtn);
+  
 }
 
 getAndRenderNotes();
+document.querySelectorAll(".list-item-title").addEventListener('click', handleNoteView);
