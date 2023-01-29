@@ -43,7 +43,7 @@ app.post('/api/notes', (req, res) => {
     const newNote = {
       title,
       text,
-      tip_id: uuidv4(),
+      note_id: uuidv4(),
     };
 
     readAndAppend(newNote, './db/db.json');
@@ -60,6 +60,25 @@ app.get('/api/notes', (req, res) => {
   readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
 }
 );
+
+app.delete('/api/notes/:note_id', (req, res) => {
+  const noteId = req.params.note_id;
+  readFromFile('./db/db.json')
+    .then((data) => JSON.parse(data))
+    .then((json) => {
+      // Make a new array of all notes except the one with the ID provided in the URL
+      const result = json.filter((app) => app.note_id !== noteId);
+
+      // Save that array to the filesystem
+      writeToFile('./db/db.json', result);
+
+      // Respond to the DELETE request
+      res.json(`Item ${noteId} has been deleted 🗑️`);
+    });
+});
+
+
+
 
 
 // Wildcard route to direct users to the index page

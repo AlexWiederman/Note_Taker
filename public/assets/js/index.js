@@ -53,7 +53,7 @@ const deleteNote = (id) =>
 const renderActiveNote = () => {
   hide(saveNoteBtn);
 
-  if (activeNote.id) {
+  if (activeNote.note_id) {
     noteTitle.setAttribute('readonly', true);
     noteText.setAttribute('readonly', true);
     noteTitle.value = activeNote.title;
@@ -83,8 +83,10 @@ const handleNoteDelete = (e) => {
   e.stopPropagation();
 
   const note = e.target;
-  const noteId = JSON.parse(note.parentElement.getAttribute('data-note')).id;
+ 
+  const noteId = JSON.parse(note.parentElement.getAttribute('data-note')).note_id;
 
+  // If current viewed note is the one about to be deleted, stop viewing it
   if (activeNote.id === noteId) {
     activeNote = {};
   }
@@ -97,8 +99,10 @@ const handleNoteDelete = (e) => {
 
 // Sets the activeNote and displays it
 const handleNoteView = (e) => {
+
   e.preventDefault();
   activeNote = JSON.parse(e.target.parentElement.getAttribute('data-note'));
+  
   renderActiveNote();
 };
 
@@ -170,7 +174,7 @@ const renderNoteList = async (notes) => {
   }
 };
 
-// Looks for click on notes sidebar and displays it
+
 
 
 
@@ -186,4 +190,6 @@ if (window.location.pathname === '/notes') {
 }
 
 getAndRenderNotes();
-document.querySelectorAll(".list-item-title").addEventListener('click', handleNoteView);
+
+// Looks for click on notes sidebar and displays it
+var test1 = document.querySelectorAll(".list-item-title") //.addEventListener('click', handleNoteView);
